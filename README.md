@@ -310,37 +310,3 @@ Tools: `analyze.py` (events, self-check, charts), `dashboard.py`,
 
 Both `demo.py` and `src/demo.py` are thin wrappers over `src/pipeline.py`, so the
 two entry points cannot drift apart.
-
-## Limitations
-
-- No metric output. Every available clip pans, so distances and speeds are in
-  pixels. Per-frame court line detection would address this and is not
-  implemented.
-- Shot detection is off by default and requires `--attacking-direction`. It needs
-  a fixed idea of where the goal is, which a panning camera invalidates. On a
-  static broadcast camera it is sound.
-- Identity churn is unsolved. Between 3.0 and 3.5 ids per player means per-player
-  totals are fragmented and should not be quoted as final. Appearance-based
-  association (ReID) is the standard remedy and is not implemented here. The
-  project ships a measured baseline instead of an unmeasured improvement. The
-  SportsMOT authors identify object association as the defining difficulty of
-  this domain, so this is the expected wall.
-- The ball detector is the weakest component. COCO's `sports ball` class on wide
-  shots produces mostly false positives. A size or shape gate, or a dedicated
-  detector, would help more than further threshold tuning.
-- Pose estimation is listed as optional and is not useful at this scale. A player
-  32 px tall has no recoverable keypoints. It is kept because the original
-  project advertised it.
-- No ground-truth evaluation. The self-check is a proxy. Measuring IDF1 or HOTA
-  requires annotated data such as SportsMOT (MOT17 format, includes aerial
-  football, CC BY-NC 4.0), which is the natural next step.
-
-## Provenance
-
-The previous version of this repository could not start. `demo.py` imported
-`src.detector` while the file was named `src/detect.py`, and `src/` had no
-`__init__.py`. The court calibration path was also dead: `pixel2court` returned
-pixels, the CSV columns `court_x` and `court_y` contained pixel values, the
-trajectory lines promised by the README were never drawn, and `filterpy` was
-required for forty lines of linear algebra. `src/README.md` lists the module
-inventory.
