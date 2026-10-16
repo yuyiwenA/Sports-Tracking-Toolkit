@@ -1,0 +1,6 @@
+# Dependencies now live in a single place: see ../requirements.txt
+#
+# This file previously carried its own list, which had drifted from the root one
+# (it still pinned filterpy and scipy, neither of which the code uses any more).
+# Duplicated manifests are how a project ends up with two truths; the canonical
+# list is the root requirements.txt.
